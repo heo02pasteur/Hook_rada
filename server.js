@@ -5,10 +5,11 @@ dotenv.config();
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
+app.use(express.static('dist'));
 
 const PORT = process.env.PORT || 3001;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-5.6-mini';
+const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-5-mini';
 
 const tools = [
   {
@@ -56,6 +57,11 @@ app.post('/api/agent', async (req,res) => {
   } catch (error) {
     return res.status(500).json({ error: error instanceof Error ? error.message : 'Agent error' });
   }
+});
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
+  res.sendFile('index.html', { root: 'dist' });
 });
 
 app.listen(PORT, () => console.log(`AI Agent server listening on ${PORT}`));
