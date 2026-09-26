@@ -1,4 +1,4 @@
-export interface AgentAction { type: 'fill_form'; data: { emailcb:string; chude:string; doithu:string; tintuc:string; muctacdong:'critical'|'high'|'medium'|'low'; tacdong:string; dexuat:string; bangchung:string }; }
+export interface AgentAction { type: 'fill_form' | 'navigate_tab'; tab?: 'analysis'|'radar'|'intake'; data: { emailcb:string; chude:string; doithu:string; tintuc:string; muctacdong:'critical'|'high'|'medium'|'low'; tacdong:string; dexuat:string; bangchung:string }; }
 export interface AgentResponse { reply: string; action?: AgentAction; error?: string; }
 
 export async function askAiAgent(message: string, context: Record<string, unknown> = {}): Promise<AgentResponse> {
