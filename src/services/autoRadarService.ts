@@ -1,0 +1,2 @@
+export type AutoRadarConfig={intervalMinutes:number;maxItems:number;keywords:string[];feeds:string[];webhookUrl:string;enabled:boolean};
+export const DEFAULT_AUTO_RADAR_CONFIG:AutoRadarConfig={intervalMinutes:60,maxItems:10,enabled:false,webhookUrl:'',keywords:['ngân hàng','lãi suất','huy động vốn','tín dụng','Vietcombank','Techcombank','BIDV','VietinBank','ACB','MB','VPBank','hộ kinh doanh','SME','thanh toán số'],feeds:['https://baodautu.vn/ngan-hang--bao-hiem.rss']};
