@@ -253,7 +253,7 @@ export default function App() {
   const [isSubmittingWebhook, setIsSubmittingWebhook] = useState(false);
   const [lastWebhookResult, setLastWebhookResult] = useState<WebhookSendResult | null>(null);
 
-  // Toast notifications
+  // AI Agent can prepare structured market records and fill the intake form.\n  const handleAgentFillForm = (data: IntakeFormData) => {\n    setFormData((prev) => ({ ...prev, ...data, id: undefined }));\n    setActiveMainTab('intake');\n    showToast('AI Agent đã điền bản nháp vào biểu mẫu. Hãy kiểm tra trước khi Cập nhật.', 'info');\n  };\n\n  // Toast notifications
   const [toast, setToast] = useState<{
     show: boolean;
     message: string;
