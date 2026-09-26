@@ -5,6 +5,7 @@ import { MarketAnalysisCard } from './components/MarketAnalysisCard';
 import { AutoRadarCard } from './components/AutoRadarCard';
 import { SavedRecordsModal } from './components/SavedRecordsModal';
 import { WebhookModal } from './components/WebhookModal';
+import { AIAgentPanel } from './components/AIAgentPanel';
 import {
   CompetitorRecord,
   MarketIntelligenceItem,
@@ -253,7 +254,13 @@ export default function App() {
   const [isSubmittingWebhook, setIsSubmittingWebhook] = useState(false);
   const [lastWebhookResult, setLastWebhookResult] = useState<WebhookSendResult | null>(null);
 
-  // AI Agent can prepare structured market records and fill the intake form.\n  const handleAgentFillForm = (data: IntakeFormData) => {\n    setFormData((prev) => ({ ...prev, ...data, id: undefined }));\n    setActiveMainTab('intake');\n    showToast('AI Agent đã điền bản nháp vào biểu mẫu. Hãy kiểm tra trước khi Cập nhật.', 'info');\n  };\n\n  // Toast notifications
+  // AI Agent can prepare structured market records and fill the intake form.
+  const handleAgentFillForm = (data: IntakeFormData) => {
+    setFormData((prev) => ({ ...prev, ...data, id: undefined }));
+    setActiveMainTab('intake');
+    showToast('AI Agent đã điền bản nháp vào biểu mẫu. Hãy kiểm tra trước khi Cập nhật.', 'info');
+  };
+\n  // Toast notifications
   const [toast, setToast] = useState<{
     show: boolean;
     message: string;
@@ -555,6 +562,8 @@ export default function App() {
           </div>
         </footer>
       </main>
+
+      <AIAgentPanel formData={formData} onFillForm={handleAgentFillForm} onNavigate={(tab) => setActiveMainTab(tab)} />
 
       {/* ========================================================================= */}
       {/* MODALS */}
