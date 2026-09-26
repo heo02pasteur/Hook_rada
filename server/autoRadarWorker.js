@@ -1,0 +1,10 @@
+import 'dotenv/config';
+import Parser from 'rss-parser';
+const parser=new Parser();
+const key=process.env.OPENAI_API_KEY;
+const hook=process.env.MAKE_WEBHOOK_URL;
+const feeds=(process.env.AUTO_RADAR_FEEDS||'https://baodautu.vn/ngan-hang--bao-hiem.rss').split(',').map(x=>x.trim()).filter(Boolean);
+const keywords=(process.env.AUTO_RADAR_KEYWORDS||'ngân hàng,lãi suất,huy động vốn,tín dụng,Vietcombank,Techcombank,BIDV,VietinBank,ACB,MB,VPBank,hộ kinh doanh,SME,thanh toán số').split(',').map(x=>x.trim().toLowerCase());
+async function ai(item){const body={model:process.env.OPENAI_MODEL||'gpt-5-mini',input:'Phân tích tin thị trường ngân hàng Việt Nam. Chỉ dùng dữ liệu bài viết. Trả JSON đúng 8 trường: emailcb,chude,doithu,tintuc,muctacdong,tacdong,dexuat,bangchung. muctacdong chỉ critical/high/medium/low. bangchung phải có nguồn và URL.\n'+JSON.stringify(item)};const r=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d?.error?.message||'OpenAI error');const t=(d.output||[]).flatMap(x=>x.content||[]).find(x=>x.type==='output_text')?.text||'{}';return JSON.parse(t.replace(/^\`\`\`json|^\`\`\`|\`\`\`$/gm,'').trim())}
+async function run(){if(!key||!hook)return console.log('Auto Radar: thiếu OPENAI_API_KEY hoặc MAKE_WEBHOOK_URL');for(const feed of feeds){const data=await parser.parseURL(feed);for(const x of (data.items||[]).filter(x=>keywords.some(k=>(x.title+' '+(x.contentSnippet||'')).toLowerCase().includes(k))).slice(0,Number(process.env.AUTO_RADAR_MAX_ITEMS||10))){const record=await ai({title:x.title,summary:x.contentSnippet,link:x.link,published:x.pubDate,source:data.title});await fetch(hook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(record)});console.log('sent',x.title)}}}
+run().catch(console.error);
