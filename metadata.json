@@ -1,0 +1,6 @@
+{
+  "name": "THÔNG TIN THỊ TRƯỜNG",
+  "description": "Cổng thông tin thị trường và phân tích đối thủ cạnh tranh bán lẻ Vietcombank.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
