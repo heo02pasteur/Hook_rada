@@ -10,7 +10,8 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "start": "node server.js",
-    "dev:agent": "node server.js"
+    "dev:agent": "node server.js",
+    "auto-radar": "node server/autoRadarWorker.js"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -22,7 +23,8 @@
     "vite": "^8.3.0",
     "express": "^4.21.2",
     "dotenv": "^17.2.3",
-    "motion": "^12.23.24"
+    "motion": "^12.23.24",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
