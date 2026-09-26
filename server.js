@@ -27,6 +27,13 @@ const tools = [
       required: ['emailcb','chude','doithu','tintuc','muctacdong','tacdong','dexuat','bangchung'],
       additionalProperties: false
     }
+  },
+  {
+    type: 'function',
+    name: 'navigate_tab',
+    description: 'Chuyển thẻ chính của website giữa phân tích, radar và nhập thông tin.',
+    strict: true,
+    parameters: { type: 'object', properties: { tab: { type: 'string', enum: ['analysis','radar','intake'] } }, required: ['tab'], additionalProperties: false }
   }
 ];
 
@@ -50,7 +57,8 @@ app.post('/api/agent', async (req,res) => {
 
     const toolCall = (data.output || []).find(x => x.type === 'function_call' && x.name === 'prepare_market_record');
     if (toolCall) {
-      return res.json({ reply: 'Tôi đã chuẩn hóa tin thành bản ghi 8 trường. Bạn có thể kiểm tra trước khi cập nhật.', action: { type: 'fill_form', data: JSON.parse(toolCall.arguments) } });
+      if (toolCall.name === 'prepare_market_record') return res.json({ reply: 'Tôi đã chuẩn hóa tin thành bản ghi 8 trường. Bạn có thể kiểm tra trước khi cập nhật.', action: { type: 'fill_form', data: JSON.parse(toolCall.arguments) } });
+      if (toolCall.name === 'navigate_tab') return res.json({ reply: 'Đã chuyển thẻ theo yêu cầu.', action: { type: 'navigate_tab', tab: JSON.parse(toolCall.arguments).tab } });
     }
     const text = (data.output || []).filter(x => x.type === 'message').flatMap(x => x.content || []).filter(c => c.type === 'output_text').map(c => c.text).join('\n');
     return res.json({ reply: text || 'Tôi chưa tạo được phản hồi.' });
